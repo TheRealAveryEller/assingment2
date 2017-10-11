@@ -1,18 +1,20 @@
+
+import java.util.*;
 public class Task {
     
 	private String description;
 	private int priority;
-	private int[] dueDate = new int[3];    
+	private Date dueDate;    
 	private boolean completed;
 
-	public Task(int[] due, String desc, int pri) {
+	public Task(Date due, String desc, int pri) {
      	this.description = desc;
      	this.dueDate = due;
      	this.priority = pri;
      	this.completed = false;
 	}
     
-	public Task(int[] due, String desc, int pri, int slug) {
+	public Task(Date due, String desc, int pri, int slug) {
      	this.description = desc;
      	this.dueDate = due;
      	this.priority = pri;
@@ -27,11 +29,11 @@ public class Task {
     	return this.description;
 	}
     
-	public void setDueDate(int[] due) {
+	public void setDueDate(Date due) {
     	this.dueDate = due;
 	}
     
-	public int[] getDueDate() {
+	public Date getDueDate() {
     	return this.dueDate;
 	}
     

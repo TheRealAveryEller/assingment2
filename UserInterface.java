@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class UserInterface {
@@ -8,6 +9,7 @@ public class UserInterface {
     private String welcomeMsg = "Welcome To The Task Manager, Friend!";
     private String normalMsg = "Operations";
     private String invalidInputMsg = "That is not a valid option!";
+    private String invalidFormatMsg = "That is not the valid format!";
     private String createNewTaskMsg = "Create A New Task!";
     
     public void welcome() {
@@ -89,7 +91,8 @@ public class UserInterface {
     // Maybe Add Date Validation
     // Needs Cleaning
     private void createNewTask() {
-        int[] dueDate = new int[3];
+        Date dueDate;
+        int priority;
         String description = "";
         String[] priorityOptions = {
             "Meaningless",
@@ -97,45 +100,43 @@ public class UserInterface {
             "Should Get Done By Due Date",
             "Immediate Action"
         };
-        int priority;
-        int compChoice;
         
-
         talkToUser(createNewTaskMsg);
 
-        System.out.print("\nDue Date\nYear:\t");
-        dueDate[0] = in.nextInt();
-        do{
-            System.out.print("Month:\t");
-            dueDate[1] = in.nextInt();
-        }while(dueDate[1] > 12 || dueDate[1] < 1);
-        do{
-            System.out.print("Day:\t");
-            dueDate[2] = in.nextInt();
-        }while(dueDate[2] > 31 || dueDate[2] < 1);
-        in.nextLine();
-        do{
-            System.out.print("Description:\t");
-            description = in.nextLine();
-        } while(description == "");        
-
-        System.out.print("Priority");
+        dueDate = captureDate();
+        description = captureDescription();
+        System.out.print("Task Priority");
         priority = getResponse(priorityOptions);
-        
-        do{
-            System.out.print("Completed is set to false. OK?\n1:\tYes\n2:\tNo\nChoice:\t");
-            compChoice = in.nextInt();
-        } while (compChoice < 1 || compChoice > 2);
-        if(compChoice == 1) {
-            Task newTask = new Task(dueDate, description, priority);
-            list.add( newTask );
-        } else if (compChoice == 2) {
-            Task newTask = new Task(dueDate, description, priority, compChoice);
-            list.add( newTask );
-        }
-        
+        list.add(new Task(dueDate, description, priority));
         normal();
     }
+
+    private Date captureDate() {
+        boolean formatted;
+
+        String dateHolder;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+        Date date = null;
+        
+        do{
+            formatted = true;
+            try {
+                System.out.print("\nEnter the Date in dd-MMM-yyyy Format\nIE: 12-JAN-2020\nDate:\t");
+                dateHolder = in.next();
+                date = dateFormat.parse(dateHolder);
+            } catch (Exception e) {
+                formatted = false; 
+                talkToUser(invalidFormatMsg);
+            }
+        } while (!formatted);
+        return date;
+    }
+
+    private String captureDescription() {
+        in.nextLine();
+        System.out.print("Task Description:\t");
+        return in.nextLine();
+    } 
 
     private void orderList() {
         System.out.println("This is the hard part");
@@ -150,6 +151,7 @@ public class UserInterface {
     }
 
     private void talkToUser(String string) {
+        System.out.println();
         dashesFor(string);
         System.out.println("\n" + string);
         dashesFor(string);
