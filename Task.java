@@ -1,9 +1,11 @@
 
+import java.io.Serializable;
 import java.util.*;
-public class Task {
-    
+public class Task implements Serializable, Comparable<Task> {
+	
+	// private static final long serialVersionUID = JSON;
 	private String description;
-	private int priority;
+	public int priority;
 	private Date dueDate;    
 	private boolean completed;
 
@@ -62,5 +64,17 @@ public class Task {
         	' ' + this.dueDate +
         	' ' + this.priority +
         	' ' + this.completed;
+	}
+
+	public static final Comparator<Task> PriorityComparator = new Comparator<Task>() {
+		@Override
+			public int compare(Task one, Task two) {
+				return one.priority - two.priority;
+			}
+	};
+
+	@Override
+	public int compareTo(Task task) {
+		return this.priority - task.priority;
 	}
 }
